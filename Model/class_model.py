@@ -170,8 +170,10 @@ class QBC_agent:
 
             q_val1, q_val2 = self.q1(state_batch, action_batch), self.q2(state_batch, action_batch)
 
-            weight = torch.min((q_val1 - min_q) / abs(min_q), (q_val2 - min_q) / abs(min_q))
-            weight = weight.clamp(0.0, 2.0)
+            # weight = torch.min((q_val1 - min_q) / abs(min_q), (q_val2 - min_q) / abs(min_q))
+            # weight = weight.clamp(0.0, 2.0)
+            weight = F.relu(torch.min((q_val1 - min_q), (q_val2 - min_q)))
+            weight = weight/(torch.abs(min_q)/100)
 
         self.pi_opt.zero_grad()
         pred_action = self.pi(state_batch)
