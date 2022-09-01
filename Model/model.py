@@ -62,6 +62,7 @@ class Policy(nn.Module):
             nn.Linear(h_size, h_size),
             nn.ReLU(),
             nn.Linear(h_size, a_dim),
+            nn.Tanh()
         )
     def forward(self,o_input:torch.Tensor,repeat=None):
         if repeat is not None:

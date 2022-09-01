@@ -130,6 +130,7 @@ class QBC_agent:
         state_batch, action_batch, reward_batch, next_state_batch, done_batch = batch
         state_batch = torch.FloatTensor(state_batch).to(self.args.device_train)
         action_batch = torch.FloatTensor(action_batch).to(self.args.device_train)
+
         self.pi_opt.zero_grad()
         pred_action = self.pi(state_batch)
         action_loss = F.mse_loss(pred_action,action_batch)
@@ -151,10 +152,10 @@ class QBC_agent:
             self.q_train(state_batch, action_batch, reward_batch, next_state_batch, done_batch)
 
         self.q_update_count += 1
-        if self.q_update_count%2 == 0:
-            with torch.no_grad():
-                soft_update(self.target_q1, self.q1, self.tau)
-                soft_update(self.target_q2, self.q2, self.tau)
+        # if self.q_update_count%2 == 0:
+        with torch.no_grad():
+            soft_update(self.target_q1, self.q1, self.tau)
+            soft_update(self.target_q2, self.q2, self.tau)
 
     def train_QBC(self,batch):
 
@@ -170,10 +171,8 @@ class QBC_agent:
 
             q_val1, q_val2 = self.q1(state_batch, action_batch), self.q2(state_batch, action_batch)
 
-            # weight = torch.min((q_val1 - min_q) / abs(min_q), (q_val2 - min_q) / abs(min_q))
-            # weight = weight.clamp(0.0, 2.0)
-            weight = F.relu(torch.min((q_val1 - min_q), (q_val2 - min_q)))
-            weight = weight/(torch.abs(min_q)/100)
+            weight = torch.min((q_val1 - min_q) / torch.abs(min_q), (q_val2 - min_q) / torch.abs(min_q))
+            weight = weight.clamp(0.0, 2.0)
 
         self.pi_opt.zero_grad()
         pred_action = self.pi(state_batch)
