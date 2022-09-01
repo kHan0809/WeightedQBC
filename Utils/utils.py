@@ -32,3 +32,27 @@ class d4rl_dataset():
         return self.dataset['observations'][idx], self.dataset['actions'][idx], self.dataset['rewards'][idx], self.dataset['next_observations'][idx], self.dataset['dones'][idx]
 
 
+
+def Eval(env,agent,epoch_count,args):
+    epi_length = env.spec.max_episode_steps
+    action_max = env.action_space.high[0]
+    epi_return = []  # 나중에 success까지 포함해야할듯
+    agent.pi.eval()
+    for eval_epi in range(args.eval_num):
+      state = env.reset()
+      total_reward = 0
+      for step in range(epi_length):
+        # if eval_epi == (eval_num-1):
+        #     env.render()
+        action = agent.select_action(state.reshape([1,-1]),eval=True)
+        state, rwd, done, _ = env.step(action * action_max)
+        total_reward += rwd
+        if done:
+          break
+      epi_return.append(total_reward)
+    print("==================[Eval]====================")
+    print("Epoch        : ", epoch_count)
+    print("Mean return  : ", np.mean(epi_return), "Min return", np.min(epi_return), "Max return", np.max(epi_return))
+    return np.mean(epi_return)
+
+
