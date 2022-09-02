@@ -30,14 +30,12 @@ for num in range(args.bc_train_epoch):
   #====Eval====
   if epoch_count % args.eval_period == 0:
     mean_return = Eval(env,agent,epoch_count,args)
-    if mean_return > max_return:
-      max_return, max_idx = copy.deepcopy(mean_return), copy.deepcopy(epoch_count)
-      agent.save_checkpoint(args.task_name+str(args.cql), epoch_count, "./model_save/bc")
-print("[BC MAX_IDX] : ", max_idx)
+    agent.save_checkpoint(args.task_name+str(args.cql), epoch_count, "./model_save/bc")
 
 #=============Q train=====================
+
+agent.init_pi(args.task_name+str(args.cql), epoch_count, "./model_save/bc")
 epoch_count = 0
-agent.init_pi(args.task_name+str(args.cql), max_idx, "./model_save/bc")
 for num in range(args.q_train_epoch):
   for step in range(args.train_num_per_epoch):
     batch = dataset.get_data()
@@ -51,6 +49,7 @@ for num in range(args.q_train_epoch):
 
 #==========QBC train====================
 epoch_count, max_return, max_idx = 0, 0, 0
+agent = QBC_agent(state_dim,action_dim,args)
 # agent.init_pi(args.task_name+str(args.cql), args.q_idx, "./model_save/bc_q")
 agent.init_q(args.task_name+str(args.cql),  args.q_idx, "./model_save/bc_q")
 for num in range(args.qbc_train_epoch):

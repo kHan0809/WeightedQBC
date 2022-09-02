@@ -16,8 +16,8 @@ def get_args():
 
     # ====================train===============
     parser.add_argument('--train_num_per_epoch', type=int, default=1000)
-    parser.add_argument('--bc_train_epoch',      type=int, default=50)
-    parser.add_argument('--q_train_epoch', type=int, default=50)
+    parser.add_argument('--bc_train_epoch',      type=int, default=80)
+    parser.add_argument('--q_train_epoch', type=int, default=60)
     parser.add_argument('--q_idx', type=int, default=0)
     parser.add_argument('--cql', type=bool,  default=True)
     parser.add_argument('--qbc_train_epoch', type=int, default=1000)

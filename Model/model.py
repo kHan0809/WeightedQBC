@@ -44,6 +44,8 @@ class Qnet(nn.Module):
             nn.ReLU(),
             nn.Linear(h_size, h_size),
             nn.ReLU(),
+            nn.Linear(h_size, h_size),
+            nn.ReLU(),
             nn.Linear(h_size, 1),
         )
 
@@ -61,6 +63,8 @@ class Policy(nn.Module):
             nn.ReLU(),
             nn.Linear(h_size, h_size),
             nn.ReLU(),
+            nn.Linear(h_size, h_size),
+            nn.ReLU(),
             nn.Linear(h_size, a_dim),
             nn.Tanh()
         )
@@ -69,3 +73,38 @@ class Policy(nn.Module):
             o_input = extend_and_repeat(o_input, 1, repeat)
         action = self.net(o_input)
         return action
+
+# class Policy(nn.Module):
+#     def __init__(self,o_dim,a_dim, h_size=256):
+#         super(Policy,self).__init__()
+#         self.fc1 = nn.Linear(o_dim        , h_size)
+#         self.fc2 = nn.Linear(h_size       , h_size)
+#         self.fc3 = nn.Linear(h_size       , a_dim)
+#         self.relu1 = nn.ReLU()
+#         self.relu2 = nn.ReLU()
+#         self.tanh  = nn.Tanh()
+#
+#     def forward(self,o_input:torch.Tensor,repeat=None):
+#         if repeat is not None:
+#             o_input = extend_and_repeat(o_input, 1, repeat)
+#         layer = self.relu1(self.fc1(o_input))
+#         layer = self.relu2(self.fc2(layer))
+#         action  = self.tanh(self.fc3(layer))
+#         return action
+#
+# class Qnet(nn.Module):
+#     def __init__(self, o_dim, a_dim, h_size=256):
+#         super(Qnet,self).__init__()
+#         self.fc1 = nn.Linear(o_dim + a_dim, h_size)
+#         self.fc2 = nn.Linear(h_size       , h_size)
+#         self.fc3 = nn.Linear(h_size       , 1)
+#         self.relu1 = nn.ReLU()
+#         self.relu2 = nn.ReLU()
+#
+#     @multiple_action_q_function
+#     def forward(self,o_input:torch.Tensor,a_input:torch.Tensor):
+#         inputs = torch.concat([o_input,a_input],dim=-1)
+#         layer = self.relu1(self.fc1(inputs))
+#         layer = self.relu2(self.fc2(layer))
+#         qval  = self.fc3(layer)
+#         return torch.squeeze(qval,dim=-1)
