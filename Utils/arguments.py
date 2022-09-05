@@ -2,7 +2,7 @@ import argparse
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task_name', default="halfcheetah-random-v2", help="halfcheetah-medium-expert-v2 halfcheetah-medium-v2 halfcheetah-expert-v2")
+    parser.add_argument('--task_name', default="walker2d-medium-expert-v2", help="halfcheetah-medium-replay-v2 halfcheetah-random-v2 halfcheetah-medium-replay-v2")
 
     parser.add_argument('--device_eval',  default="cpu")
     parser.add_argument('--device_train', default="cuda")
@@ -25,9 +25,6 @@ def get_args():
     #=====================eval===============
     parser.add_argument('--eval_num',    type=int, default=5)
     parser.add_argument('--eval_period', type=int, default=5)
-
-
-
 
     args = parser.parse_args()
     return args

@@ -53,6 +53,48 @@ def Eval(env,agent,epoch_count,args):
     print("==================[Eval]====================")
     print("Epoch        : ", epoch_count)
     print("Mean return  : ", np.mean(epi_return), "Min return", np.min(epi_return), "Max return", np.max(epi_return))
-    return np.mean(epi_return)
+    return np.mean(epi_return), np.min(epi_return), np.max(epi_return)
+
+class logger():
+    def __init__(self,task_name,path,iter=0):
+        self.path = path + '/' + task_name + '-' + str(iter)
+        f = open(self.path + ".txt", 'w')
+        f.close()
+
+    def write_sep(self,stage):
+        f = open(self.path + ".txt", 'a')
+        f.write("====="+stage+"======")
+        f.write("\n")
+        f.close()
+
+    def write_eval(self, epoch, mean, min, max):
+        f = open(self.path + ".txt", 'a')
+        f.write("Epoch")
+        f.write(" ")
+        f.write(str(epoch))
+        f.write("     ")
+        f.write(str(round(mean, 1)))
+        f.write(" ")
+        f.write(str(round(min, 1)))
+        f.write(" ")
+        f.write(str(round(max, 1)))
+        f.write(" ")
+        f.write("\n")
+        f.close()
+
+    def write_q(self, epoch, q1, q2):
+        f = open(self.path + ".txt", 'a')
+        f.write("Epoch")
+        f.write(" ")
+        f.write(str(epoch))
+        f.write("     ")
+        f.write(str(np.round(q1, 1)))
+        f.write(" ")
+        f.write(str(np.round(q2, 1)))
+        f.write(" ")
+        f.write("\n")
+        f.close()
+
+
 
 
