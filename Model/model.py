@@ -61,6 +61,21 @@ class Qnet(nn.Module):
         qval  = self.fc3(layer)
         return torch.squeeze(qval,dim=-1)
 
+class Vnet(nn.Module):
+    def __init__(self, o_dim, h_size=256):
+        super(Vnet,self).__init__()
+        self.fc1 = nn.Linear(o_dim        , h_size)
+        self.fc2 = nn.Linear(h_size       , h_size)
+        self.fc3 = nn.Linear(h_size       , 1)
+        self.relu1 = nn.ReLU()
+        self.relu2 = nn.ReLU()
+
+    def forward(self,o_input:torch.Tensor):
+        layer = self.relu1(self.fc1(o_input))
+        layer = self.relu2(self.fc2(layer))
+        vval  = self.fc3(layer)
+        return torch.squeeze(vval,dim=-1)
+
 class Policy(nn.Module):
     def __init__(self,o_dim,a_dim, h_size=256):
         super(Policy,self).__init__()
