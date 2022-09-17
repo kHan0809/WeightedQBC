@@ -2,7 +2,7 @@ import argparse
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task_name', default="hopper-medium-expert-v2", help="halfcheetah-medium-replay-v2 halfcheetah-random-v2 halfcheetah-medium-replay-v2")
+    parser.add_argument('--task_name', default="halfcheetah", help="halfcheetah-medium-replay-v2 halfcheetah-random-v2 halfcheetah-medium-replay-v2")
 
     parser.add_argument('--device_eval',  default="cpu")
     parser.add_argument('--device_train', default="cuda")

@@ -83,19 +83,19 @@ class BC_agent:
         self.cql_clip_diff_min = -np.inf
         self.cql_clip_diff_max =  np.inf
 
-    def init_pi(self,task_name,iter,path):
-        path = path + '/' + task_name + '-' + str(iter) + '.pt'
+    def init_pi(self,task_name,iter,epoch,path):
+        path = path + '/' + task_name + '-' + str(iter) + '-' + str(epoch) + '.pt'
         self.pi.load_state_dict(torch.load(path)['policy'])
         self.target_pi = deepcopy(self.pi)
-    def init_q(self,task_name,iter,path):
-        path = path + '/' + task_name + '-' + str(iter) + '.pt'
+    def init_q(self,task_name,iter,epoch,path):
+        path = path + '/' + task_name + '-' + str(iter) + '-' + str(epoch) + '.pt'
         self.q1.load_state_dict(torch.load(path)['q1'])
         self.q2.load_state_dict(torch.load(path)['q2'])
         self.target_q1 = deepcopy(self.q1)
         self.target_q2 = deepcopy(self.q2)
 
-    def save_checkpoint(self,task_name,iter,path):
-        path = path +'/'+task_name+'-'+ str(iter) + '.pt'
+    def save_checkpoint(self,task_name,iter,epoch,path):
+        path = path +'/'+task_name+'-'+str(iter)+'-'+ str(epoch) + '.pt'
         print('Saving model to {}'.format(path))
         torch.save({'policy': self.pi.state_dict(),
                     'q1'    : self.q1.state_dict(),
