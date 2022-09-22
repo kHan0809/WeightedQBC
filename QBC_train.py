@@ -24,6 +24,8 @@ for data_ in data_list:
     log = logger(task+str(args.cql),'./log',iter=iteration)
 
     agent = BC_agent(state_dim,action_dim,args)
+    agent.__init__(state_dim,action_dim,args) # since
+
     epoch_count = 0
     #==========BC train====================
     log.write_sep("BC")
